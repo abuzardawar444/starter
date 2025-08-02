@@ -1,4 +1,6 @@
-export const links: { href: string; label: string }[] = [
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+export const links: { label: string; href: string }[] = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Blog", href: "/blog" },
 ];

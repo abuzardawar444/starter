@@ -2,16 +2,18 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientProvider from "./providers";
-import Navbar from "@/components/navbar/navbar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -41,19 +43,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <ClientProvider>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <Navbar />
-          <main className="container">{children}</main>
+    <ClerkProvider
+    // example redirect config; adapt per project
+    // afterSignOutUrl="/"
+    >
+      <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+        <body className="antialiased">
+          <ClientProvider>
+            <main className="container">{children}</main>
+          </ClientProvider>
         </body>
-      </ClientProvider>
-    </html>
+      </html>
+    </ClerkProvider>
   );
 }

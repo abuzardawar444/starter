@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "sonner";
 import Navbar from "@/components/navbar/navbar";
+import Footer from "@/components/footer/footer";
 
 interface Props {
   children: React.ReactNode;
@@ -48,6 +49,7 @@ const ClientProvider = ({ children }: Props) => {
         <QueryClientProvider client={queryClient}>
           <Navbar />
           {children}
+          <Footer />
           {process.env.NODE_ENV === "development" && (
             <ReactQueryDevtools initialIsOpen={false} />
           )}

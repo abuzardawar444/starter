@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String              @id @default(uuid()) @map("_id")
+  externalId            String?             @map("external_id")
+  emailAddress          String              @map("email_address")
+  imageUrl              String              @map("image_url")
+  firstName             String?             @map("first_name")
+  lastName              String?             @map("last_name")
+  lastActiveAt          DateTime?           @map("last_active_at")
+  lastSignInAt          DateTime?           @map("last_sign_in_at")
+  createdAt             DateTime            @map("created_at")
+  updatedAt             DateTime            @map("updated_at")
+  banned                Boolean             @map("banned")
+  privateMetadata       Json                @map("private_metadata")
+  publicMetadata        Json                @map("public_metadata")
+  unsafeMetadata        Json                @map("unsafe_metadata")
+  username              String?             @map("username")
+  primaryEmailAddressId String?             @map("primary_email_address_id")
+  additionalMetadata    Json?               @map("additional_metadata")
+  subscriptions         UsersSubscriptions?
+
+  @@index([emailAddress])
+  @@index([username])
+}
+
+model UsersSubscriptions {
+  id        String   @id @default(uuid()) @map("_id")
+  createdAt DateTime @default(now()) @map(name: "created_at")
+  updatedAt DateTime @default(now()) @map(name: "updated_at")
+
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  isCanceled             Boolean   @default(false) @map("is_canceled")
+  weeklyUploadCount      Int       @default(0) @map("weekly_upload_count")
+  resetDate              DateTime? @default(now()) @map("reset_date")
+
+  user User? @relation(fields: [id], references: [id], onDelete: Cascade) // One-to-one relation with User
+
+  @@map(name: "users_subscriptions")
+}

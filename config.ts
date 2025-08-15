@@ -1,3 +1,5 @@
+import { SubscriptionPlan } from "./types";
+
 const config = {
   // REQUIRED
   appName: "starter",
@@ -12,77 +14,51 @@ const config = {
     // Hide Crisp by default, except on route "/". Crisp is toggled with <ButtonSupport/>. If you want to show Crisp on every routes, just remove this below
     onlyShowOnRoutes: ["/"],
   },
-  stripe: {
-    // Create multiple plans in your Stripe dashboard, then add them here. You can add as many plans as you want, just make sure to add the priceId
-    plans: [
-      {
-        // REQUIRED — we use this to find the plan in the webhook (for instance if you want to update the user's credits based on the plan)
-        priceId:
-          process.env.NODE_ENV === "development"
-            ? "price_1Niyy5AxyNprDp7iZIqEyD2h"
-            : "price_456",
-        //  REQUIRED - Name of the plan, displayed on the pricing page
-        name: "Starter",
-        // A friendly description of the plan, displayed on the pricing page. Tip: explain why this plan and not others
-        description: "Perfect for small projects",
-        // The price you want to display, the one user will be charged on Stripe.
-        price: 79,
-        // If you have an anchor price (i.e. $29) that you want to display crossed out, put it here. Otherwise, leave it empty
-        priceAnchor: 99,
-        features: [
-          {
-            name: "NextJS boilerplate",
-          },
-          { name: "User oauth" },
-          { name: "Database" },
-          { name: "Emails" },
-        ],
-      },
-      {
-        // This plan will look different on the pricing page, it will be highlighted. You can only have one plan with isFeatured: true
-        isFeatured: true,
-        priceId:
-          process.env.NODE_ENV === "development"
-            ? "price_1O5KtcAxyNprDp7iftKnrrpw"
-            : "price_456",
-        name: "Advanced",
-        description: "You need more power",
-        price: 99,
-        priceAnchor: 149,
-        features: [
-          {
-            name: "NextJS boilerplate",
-          },
-          { name: "User oauth" },
-          { name: "Database" },
-          { name: "Emails" },
-          { name: "1 year of updates" },
-          { name: "24/7 support" },
-        ],
-      },
-    ],
-  },
-  aws: {
-    // If you use AWS S3/Cloudfront, put values in here
-    bucket: "bucket-name",
-    bucketUrl: `https://bucket-name.s3.amazonaws.com/`,
-    cdn: "https://cdn-id.cloudfront.net/",
-  },
-  resend: {
-    // REQUIRED — Email 'From' field to be used when sending magic login links
-    fromNoReply: `Starter <noreply@resend.starter.com>`,
-    // REQUIRED — Email 'From' field to be used when sending other emails, like abandoned carts, updates etc..
-    fromAdmin: `Marc at starter <starter@resend.starter.com>`,
-    // Email shown to customer if need support. Leave empty if not needed => if empty, set up Crisp above, otherwise you won't be able to offer customer support."
-    supportEmail: "mail.starter@gmail.com",
-  },
-
-  auth: {
-    // REQUIRED — the path to log in users. It's use to protect private routes (like /dashboard). It's used in apiClient (/libs/api.js) upon 401 errors from our API
-    loginUrl: "/api/auth/signin",
-    // REQUIRED — the path you want to redirect users after successfull login (i.e. /dashboard, /private). This is normally a private page for users to manage their accounts. It's used in apiClient (/libs/api.js) upon 401 errors from our API & in ButtonSignin.js
-    callbackUrl: "/dashboard",
-  },
 };
+
+export const pricingData: SubscriptionPlan[] = [
+  {
+    title: "Starter",
+    description: "For Beginners",
+    benefits: ["Basic Support", "Access to all features"],
+    limitations: ["No custom domain", "Limited API calls"],
+    prices: {
+      monthly: 0,
+      yearly: 0,
+    },
+    stripeIds: {
+      monthly: null,
+      yearly: null,
+    },
+  },
+  {
+    title: "Pro",
+    description: "For Professionals",
+    benefits: ["Priority Support", "Custom Domain", "Unlimited API calls"],
+    limitations: ["Limited to 1000 users"],
+    prices: {
+      monthly: 200,
+      yearly: 600,
+    },
+    stripeIds: {
+      monthly: process.env.STRIPE_MONTHLY_PRICE_ID!,
+      yearly: process.env.STRIPE_MONTHLY_PRICE_ID!,
+    },
+  },
+  {
+    title: "Business",
+    description: "For Businesses",
+    benefits: ["24/7 Support", "Custom Integrations", "Unlimited Users"],
+    limitations: ["No limitations"],
+    prices: {
+      monthly: 400,
+      yearly: 5000,
+    },
+    stripeIds: {
+      monthly: process.env.STRIPE_MONTHLY_PRICE_ID!,
+      yearly: process.env.STRIPE_MONTHLY_PRICE_ID!,
+    },
+  },
+];
 
 export default config;

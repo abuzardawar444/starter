@@ -1,10 +1,4 @@
-import {
-  useUser,
-  SignOutButton,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-} from "@clerk/nextjs";
+import { useUser, SignOutButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,7 +57,7 @@ const NavRight = () => {
         <CustomUserButton />
       </SignedIn>
       <SignedOut>
-        <SignInButton mode="modal" />
+        <Link href="/sign-in">Sign In</Link>
       </SignedOut>
     </div>
   );
